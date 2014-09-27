@@ -76,6 +76,21 @@ class PeerResource(restful.Resource):
 
         return {'peers': peers}
 
+class DocumentResource(restful.Resource):
+
+    def get(self):
+
+        documents = [
+            {
+                'name': document['name'],
+                'size': document['size'],
+                'uploaded': document['uploaded'].strftime('%Y-%m-%d %H:%M:%S')
+            } for document in db.get_all_documents()
+        ]
+
+        return {'documents': documents}
+
 api = restful.Api(app)
 api.add_resource(PeerResource, '/peers/')
 api.add_resource(PeerInstance, '/peers/<string:id>/')
+api.add_resource(DocumentResource, '/documents/')
