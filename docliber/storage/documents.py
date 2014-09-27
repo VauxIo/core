@@ -79,15 +79,23 @@ class DocEngine():
             return self.index.load_pickle(key)
         return None
 
-    def find_document(self, doc_name):
+    def get_document_path(self, doc_name):
         """
-        Return the path to a document if we have it
+        Return the path to a document if we have it. This function
+        expects the full name of a document"
         """
         fhash = self.get_hash(doc_name)
         if fhash is not None:
             subdir = fhash[0:2]
             return os.path.join(self.doc_path, subdir, fhash)
         return None
+
+    def search_documents(self, name):
+        """
+        Search our index by file name
+        """
+        for result in self.get_all(name):
+            yield result.split('_')[0]
 
     def _remove_thread(self, name):
         """
