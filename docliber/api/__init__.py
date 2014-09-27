@@ -28,6 +28,18 @@ class PeerInstance (restful.Resource):
 
         	  abort(404)
 
+    def delete (self, id):
+
+        peers = db.meta.load_pickle('peers')
+
+        if id in peers.keys():
+
+        	  db.remove_peer(id)
+
+        else:
+
+        	  abort(404)
+
 class PeerResource (restful.Resource):
 
     def get (self):
