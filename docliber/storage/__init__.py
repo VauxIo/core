@@ -8,29 +8,31 @@ class LibreDB(object):
         self.meta = MetaEngine(self.root_path)
         self.docs = DocEngine(self.root_path)
 
-    def add_peers(self, peers):
+    def add_peer(self, peer):
         """
         Add a set of peers from our databse
         :param peers: a set of peers to add
         :type peers: frozenset
         """
         if not self.meta.has_key("peers"):
-            self.meta.put_pickle("peers", frozenset(peers))
+            self.meta.put_pickle("peers", {peer['address']: peer})
         else:
-            self.meta.put_pickle(
-                "peers",
-                self.meta.load_pickle("peers") + frozenset(peers))
+            current_peers = self.meta.load_pickle("peers")
+            if peer['address'] not in current_peers:
+                    current_peers.append(peer)
+            self.meta.put_pickle("peers", current_peers)
 
-    def remove_peers(self, peers):
+    def remove_peer(self, peer):
         """
-        Remove a set of peersfrom our database
+        Remove a set of peers from our database
         :param peers: a set of peers to add
         :type peers: frozenset
         """
         if self.meta.has_key("peers"):
-            self.meta.put_pickle(
-                "peers",
-                self.meta.load_pickle("peers") - frozenset(peers))
+            current_peers = self.meta.load_pickle("peers")
+            if peer['address'] in current_peers:
+                del current_peers[peer['address']]
+            self.meta.put_pickle("peers", current_peers)
 
     def get_peers(self):
         """
@@ -39,6 +41,6 @@ class LibreDB(object):
         :rtype frozenset
         """
         if self.meta.has_key("peers"):
-            return self.meta.load_pickle("peers")
+            return [peer for _, peer in self.meta.load_pickle("peers").iteritems()]
         else:
-            return frozenset(())
+            return []
