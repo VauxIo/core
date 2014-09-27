@@ -73,13 +73,35 @@ class DocEngine():
         gevent.joinall(greenlets)
         print("Added {0} documents".format(len(paths)))
 
+    def get_hash(self, doc_name):
+        key = "{0}_hash".format(doc_name)
+        if self.index.has_key(key):
+            return self.index.load_pickle(key)
+        return None
+
     def find_document(self, doc_name):
         """
         Return the path to a document if we have it
         """
-        key = "{0}_hash".format(doc_name)
-        if self.index.has_key(key):
-            fhash = self.index.load_pickle(key)
+        fhash = self.get_hash(doc_name)
+        if fhash is not None:
             subdir = fhash[0:2]
             return os.path.join(self.doc_path, subdir, fhash)
         return None
+
+    def _remove_thread(self, name):
+        """
+        function to be run in a greenlet in order to remove documents
+        """
+        path = self.find_document(name)
+        os.remove(path)
+        self.index.delete("{0}_hash".format(name))
+
+    def remove_documents(self, names):
+        """
+        Spin up greenlets to remove a list of documents
+        """
+        greenlets = []
+        for name in names:
+            greenlets.append(gevent.spawn(self._remove_thread, name))
+        gevent.joinall(greenlets)

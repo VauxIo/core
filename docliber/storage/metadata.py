@@ -30,6 +30,12 @@ class MetaEngine(object):
             batch.Delete(key)
         self.db.Write(batch, sync=True)
 
+    def delete(self, key):
+        """
+        Delete a single key
+        """
+        self.db.Delete(key)
+
     def put_pickle(self, key, val):
         """
         Take a python value, pickle it, and put into the datbase
