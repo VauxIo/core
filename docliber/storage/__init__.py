@@ -14,7 +14,12 @@ class LibreDB(object):
         :param peers: a set of peers to add
         :type peers: frozenset
         """
-        pass
+        if not self.meta.has_key("peers"):
+            self.meta.put_pickle("peers", frozenset(peers))
+        else:
+            self.meta.put_pickle(
+                "peers",
+                self.meta.load_pickle("peers") + frozenset(peers))
 
     def remove_peers(self, peers):
         """
@@ -22,7 +27,10 @@ class LibreDB(object):
         :param peers: a set of peers to add
         :type peers: frozenset
         """
-        pass
+        if self.meta.has_key("peers"):
+            self.meta.put_pickle(
+                "peers",
+                self.meta.load_pickle("peers") - frozenset(peers))
 
     def get_peers(self):
         """
@@ -30,4 +38,7 @@ class LibreDB(object):
         :return A set of peers that we hve
         :rtype frozenset
         """
-        pass
+        if self.meta.has_key("peers"):
+            return self.meta.load_pickle("peers")
+        else:
+            return frozenset(())
