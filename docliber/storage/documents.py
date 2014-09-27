@@ -105,3 +105,10 @@ class DocEngine():
         for name in names:
             greenlets.append(gevent.spawn(self._remove_thread, name))
         gevent.joinall(greenlets)
+
+    def list_documents(self):
+        """
+        Return a list of all documents
+        """
+        for key, val in self.index.get_all("_hash"):
+            yield key.split("_")[0]

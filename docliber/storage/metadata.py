@@ -7,6 +7,10 @@ class MetaEngine(object):
     def __init__(self, root_path, dbname='meta'):
         self.db = leveldb.LevelDB(os.path.join(root_path, dbname))
 
+    def get_all(self, base):
+        for key, val in self.db.RangeIter(key_from=base, key_to=None):
+            yield key, cPickle.loads(val)
+
     def batch_put_pickle(self, kvs):
         """
         Submit a batch of writes to leveldb.
