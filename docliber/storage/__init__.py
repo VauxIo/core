@@ -22,7 +22,7 @@ class LibreDB(object):
                     current_peers[peer['address']] = peer
             self.meta.put_pickle("peers", current_peers)
 
-    def remove_peer(self, peer):
+    def remove_peer(self, peer_address):
         """
         Remove a set of peers from our database
         :param peers: a set of peers to add
@@ -30,8 +30,8 @@ class LibreDB(object):
         """
         if self.meta.has_key("peers"):
             current_peers = self.meta.load_pickle("peers")
-            if peer['address'] in current_peers:
-                del current_peers[peer['address']]
+            if peer_address in current_peers:
+                del current_peers[peer_address]
             self.meta.put_pickle("peers", current_peers)
 
     def get_peers(self):
