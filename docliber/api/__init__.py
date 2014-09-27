@@ -5,6 +5,29 @@ from docliber.storage import LibreDB
 app = Flask(__name__)
 db = LibreDB('../data')
 
+class PeerInstance (restful.Resource):
+
+    def get (self, id):
+
+        peers = db.meta.load_pickle('peers')
+
+        if id in peers.keys():
+
+        	  peer = peers[id]
+        	  
+        	  peer = {
+                'address': peer['address'],
+                'port': peer['port'],
+                'hostname': peer['hostname'],
+                'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
+            }
+
+        	  return peer
+
+        else:
+
+        	  abort(404)
+
 class PeerResource (restful.Resource):
 
     def get (self):
@@ -53,3 +76,4 @@ class PeerResource (restful.Resource):
 
 api = restful.Api(app)
 api.add_resource(PeerResource, '/peers/')
+api.add_resource(PeerInstance, '/peers/<string:id>/')
