@@ -35,8 +35,8 @@ class LibreDB(object):
         """
         return self.peers.get_all()
 
-    def get_peer(self, address):
-        return self.peers.get({'address': address})
+    def get_peer(self, peerid):
+        return self.peers.get({'id': peerid})
 
     def add_document(self, doc_path):
         return self.docs.add_document(doc_path)
