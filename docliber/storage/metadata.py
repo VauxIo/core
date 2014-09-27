@@ -4,8 +4,8 @@ import cPickle
 
 
 class MetaEngine(object):
-    def __init__(self, root_path):
-        self.db = leveldb.LevelDB(os.path.join(root_path, 'meta'))
+    def __init__(self, root_path, dbname='meta'):
+        self.db = leveldb.LevelDB(os.path.join(root_path, dbname))
 
     def batch_put_pickle(self, kvs):
         """
