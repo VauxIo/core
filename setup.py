@@ -2,7 +2,8 @@ from setuptools import setup, find_packages
 
 requires = [
     'leveldb',
-    'falcon',
+    'flask',
+    'gevent'
 ]
 
 setup(
