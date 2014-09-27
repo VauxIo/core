@@ -74,7 +74,7 @@ class MetaEngine(object):
         kfrom = "{0}_0".format(root_key)
         kto = "{0}_{1}".format(root_key, size-1)
         for key, val in self.db.RangeIter(key_from=kfrom, key_to=kto):
-            yield key, val
+            yield key, cPickle.loads(val)
 
     def delete_iterable(self, root_key):
         """
