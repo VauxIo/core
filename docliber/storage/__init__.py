@@ -44,3 +44,18 @@ class LibreDB(object):
             return [peer for _, peer in self.meta.load_pickle("peers").iteritems()]
         else:
             return []
+
+    def add_document(self, doc_path):
+        return self.docs.add_documents([doc_path])
+
+    def remove_document(self, doc_name):
+        return self.docs.remove_documents([doc_name])
+
+    def get_document(self, doc_name):
+        return self.docs.get_document_path(doc_name)
+
+    def get_all_documents(self):
+        return self.docs.list_documents()
+
+    def search_documents(self, sstring):
+        return self.docs.search_documents(sstring)
