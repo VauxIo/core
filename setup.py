@@ -10,5 +10,6 @@ setup(
     version='0.1.0',
     description='Document Liberation',
     packages=find_packages(),
-    install_requires=requires
+    install_requires=requires,
+    zip_safe=False
 )
