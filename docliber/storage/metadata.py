@@ -83,3 +83,13 @@ class MetaEngine(object):
         size = self.load_pickle(root_key)
         items = ["{0}_{1}".format(root_key, x) for x in xrange(0, size)]
         self.batch_delete(items)
+
+    def has_key(self, key):
+        """
+        Check if a key is in the datbase
+        """
+        try:
+            self.load_pickle(key)
+            return True
+        except:
+            return False
