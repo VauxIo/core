@@ -19,7 +19,7 @@ class LibreDB(object):
         else:
             current_peers = self.meta.load_pickle("peers")
             if peer['address'] not in current_peers:
-                    current_peers.append(peer)
+                    current_peers[peer['address']] = peer
             self.meta.put_pickle("peers", current_peers)
 
     def remove_peer(self, peer):
