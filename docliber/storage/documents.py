@@ -90,12 +90,14 @@ class DocEngine():
             return os.path.join(self.doc_path, subdir, fhash)
         return None
 
-    def search_documents(self, name):
+    def search_documents(self, search_str):
         """
         Search our index by file name
         """
-        for result in self.get_all(name):
-            yield result.split('_')[0]
+        for key, _ in self.index.get_all(search_str):
+            name = key.split('_')[0]
+            if search_str in name:
+                yield name
 
     def _remove_thread(self, name):
         """
