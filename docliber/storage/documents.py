@@ -92,7 +92,7 @@ class DocEngine():
         """
         Search our index by file name
         """
-        for doc in self.index.search(lambda doc: search_str in doc['name']):
+        for doc in self.index.search(lambda doc: doc['name'].match(search_str)):
             yield doc
 
     def remove_document(self, docid):
