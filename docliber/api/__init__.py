@@ -6,7 +6,7 @@ from datetime import datetime
 from werkzeug import secure_filename
 
 app = Flask(__name__)
-db = LibreDB('../data')
+database = LibreDB('../data', 'localhost', 28015, 'docliber')
 
 from peer import PeerResource, PeerInstance
 from document import DocumentResource

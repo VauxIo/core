@@ -1,7 +1,8 @@
 from flask.ext import restful
-from . import db
+from . import database
 from flask import abort, request
-import datetime
+from datetime import datetime
+import pytz
 
 class PeerInstance (restful.Resource):
 
@@ -32,11 +33,12 @@ class PeerResource(restful.Resource):
     def get(self):
         peers = [
             {
+                'id': peer['id'],
                 'address': peer['address'],
                 'port': peer['port'],
                 'hostname': peer['hostname'],
                 'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
-            } for peer in db.get_peers()
+            } for peer in database.get_peers()
         ]
 
         return {'peers': peers}
@@ -52,22 +54,26 @@ class PeerResource(restful.Resource):
 
             abort(400)
 
+        last_seen = datetime.strptime(last_seen, '%Y-%m-%d %H:%M:%S')
+        last_seen = pytz.utc.localize(last_seen)
+
         peer = {
             'address': address,
             'port': port,
             'hostname': hostname,
-            'last_seen': datetime.strptime(last_seen, '%Y-%m-%d %H:%M:%S')
+            'last_seen': last_seen
         }
 
-        db.add_peer(peer)
+        database.add_peer(peer)
 
         peers = [
             {
+                'id': peer['id'],
                 'address': peer['address'],
                 'port': peer['port'],
                 'hostname': peer['hostname'],
                 'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
-            } for peer in db.get_peers()
+            } for peer in database.get_peers()
         ]
 
         return {'peers': peers}
