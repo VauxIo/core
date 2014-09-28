@@ -12,5 +12,9 @@ setup(
     description='Document Liberation',
     packages=find_packages(),
     install_requires=requires,
-    zip_safe=False
+    zip_safe=False,
+    entry_points="""
+    [console_scripts]
+    docliber_ingest = docliber.scripts:load_from_fs
+    """
 )
