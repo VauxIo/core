@@ -24,17 +24,17 @@ class DocumentInstance(restful.Resource):
 
         return document
 
-    def delete(self, id):
+    #def delete(self, id):
 
-        document = database.get_document(id)
+    #    document = database.get_document(id)
 
-        if document is None:
+    #    if document is None:
 
-            abort(404)
+    #        abort(404)
 
-        database.remove_document(id)
+    #    database.remove_document(id)
 
-        return '', 204
+    #    return '', 204
 
 class DocumentResource(restful.Resource):
 

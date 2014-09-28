@@ -26,17 +26,17 @@ class PeerInstance (restful.Resource):
 
         return peer
 
-    def delete(self, id):
+    #def delete(self, id):
 
-        peer = database.get_peer(id)
+    #    peer = database.get_peer(id)
 
-        if peer is None:
+    #    if peer is None:
 
-            abort(404)
+    #        abort(404)
 
-        database.remove_peer(id)
+    #    database.remove_peer(id)
 
-        return '', 204
+    #    return '', 204
 
 class PeerResource(restful.Resource):
 
