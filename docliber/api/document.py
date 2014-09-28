@@ -4,6 +4,26 @@ from flask import abort, request
 from werkzeug import secure_filename
 import os
 
+class DocumentInstance(restful.Resource):
+
+    def get(self, id):
+
+        document = database.get_document(id)
+
+        if document is None:
+
+            abort(404)
+
+        document = {
+            'id': document['id'],
+            'name': document['name'],
+            'size': document['size'],
+            'path': document['path'],
+            'uploaded': document['upload_time'].strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        return document
+
 class DocumentResource(restful.Resource):
 
     def get(self):

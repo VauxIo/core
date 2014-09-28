@@ -9,9 +9,10 @@ app = Flask(__name__)
 database = LibreDB('../data', 'localhost', 28015, 'docliber')
 
 from peer import PeerResource, PeerInstance
-from document import DocumentResource
+from document import DocumentResource, DocumentInstance
 
 api = restful.Api(app)
 api.add_resource(PeerResource, '/peers/')
 api.add_resource(PeerInstance, '/peers/<string:id>/')
 api.add_resource(DocumentResource, '/documents/')
+api.add_resource(DocumentInstance, '/documents/<string:id>/')
