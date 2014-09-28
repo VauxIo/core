@@ -6,6 +6,7 @@ import os
 import os.path
 from docliber.storage.metadata import MetaEngine
 from docliber.storage.pdfindexer import PDFIndexer
+from docliber.peering import Replicator
 from hashlib import sha1
 import itertools
 import datetime
@@ -38,7 +39,8 @@ class DocEngine():
         self.index = MetaEngine(hostname, port, db, 'documents')
         self.pdfindex_queue = gevent.queue.Queue()
         self.pdfindexers = [PDFIndexer(self.pdfindex_queue, hostname, port, db) for x in xrange(0, 4)]
-        map(gevent.spawn, map(lambda pi: pi.run, self.pdfindexers))
+        self.replicators = [Replicator(self.pdfindex_queue, hostname, port, db) for x in xrange(0, 4)]
+        map(gevent.spawn, map(lambda pi: pi.run, self.pdfindexers + self.replicators))
 
     def _create_dirs(self):
         """
