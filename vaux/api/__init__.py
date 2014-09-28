@@ -20,6 +20,7 @@ database = LibreDB(
 
 from peer import PeerResource, PeerInstance
 from document import DocumentResource, DocumentInstance
+from downloads import DownloadInstance
 
 api = restful.Api(app)
 
@@ -29,3 +30,4 @@ api.add_resource(PeerResource, '/peers/')
 api.add_resource(PeerInstance, '/peers/<string:id>/')
 api.add_resource(DocumentResource, '/documents/')
 api.add_resource(DocumentInstance, '/documents/<string:id>/')
+api.add_resource(DownloadInstance, '/download/<string:id>/')
