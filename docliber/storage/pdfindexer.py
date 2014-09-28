@@ -18,14 +18,14 @@ class PDFIndexer(object):
         """
         while True:
             docid = self.in_queue.get()
-            document = self.index.get_document_path(docid)
+            document = self.index.get({'id': docid})
             pdf = PdfFileReader(file(document['path'], 'rb'))
             doc_info = pdf.getDocumentInfo()
             pdf_info = {
-                'title': doc_info.title,
-                'author': doc_info.author,
-                'creator': doc_info.creator,
-                'producer': doc_info.producer
+                'title': doc_info.title or '',
+                'author': doc_info.author or '',
+                'creator': doc_info.creator or '',
+                'producer': doc_info.producer or ''
             }
             r.table('documents').filter(
                 {'id': docid}).update(

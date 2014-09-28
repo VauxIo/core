@@ -38,7 +38,7 @@ class DocEngine():
         self.index = MetaEngine(hostname, port, db, 'documents')
         self.pdfindex_queue = gevent.queue.Queue()
         self.pdfindexers = [PDFIndexer(self.pdfindex_queue, hostname, port, db) for x in xrange(0, 4)]
-        map(gevent.spawn, self.pdfindexers)
+        map(gevent.spawn, map(lambda pi: pi.run, self.pdfindexers))
 
     def _create_dirs(self):
         """
@@ -83,7 +83,7 @@ class DocEngine():
             'upload_time': upload_time,
             'path': final_path})
         self.index.put(index_objects)
-        self.pdfindexer_queue.put(self.index.get({'path': final_path})['id'])
+        self.pdfindex_queue.put(self.index.get({'path': final_path})['id'])
 
     def get_document_path(self, docid):
         """
