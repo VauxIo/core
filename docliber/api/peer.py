@@ -7,30 +7,39 @@ import pytz
 class PeerInstance (restful.Resource):
 
     def get(self, id):
-        peers = db.meta.load_pickle('peers')
-        if id in peers.keys():
-            peer = peers[id]
-            peer = {
-                'address': peer['address'],
-                'port': peer['port'],
-                'hostname': peer['hostname'],
-                'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
-            }
-            return peer
-        else:
+
+        peer = database.get_peer(id)
+
+        if peer is None:
+
             abort(404)
+
+        peer = {
+            'id': peer['id'],
+            'address': peer['address'],
+            'port': peer['port'],
+            'hostname': peer['hostname'],
+            'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        return peer
 
     def delete(self, id):
-        peers = db.meta.load_pickle('peers')
-        if id in peers.keys():
-            db.remove_peer(id)
-        else:
+
+        peer = database.get_peer(id)
+
+        if peer is None:
+
             abort(404)
 
+        database.remove_peer(id)
+
+        return '', 204
 
 class PeerResource(restful.Resource):
 
     def get(self):
+
         peers = [
             {
                 'id': peer['id'],
