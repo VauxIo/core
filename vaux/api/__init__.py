@@ -1,4 +1,5 @@
 import os
+import ConfigParser
 from flask import Flask, abort, request
 from flask.ext import restful
 from vaux.storage import LibreDB
@@ -7,7 +8,15 @@ from werkzeug import secure_filename
 from cors import crossdomain
 
 app = Flask(__name__)
-database = LibreDB('../data', 'localhost', 28015, 'docliber')
+
+config = ConfigParser.SafeConfigParser()
+config.read('/etc/vaux.ini')
+
+database = LibreDB(
+    config.get('data', 'path'),
+    config.get('database', 'host'),
+    config.getint('database', 'port'),
+    config.get('database', 'database'))
 
 from peer import PeerResource, PeerInstance
 from document import DocumentResource, DocumentInstance
