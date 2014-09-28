@@ -1,6 +1,8 @@
 from flask.ext import restful
-from . import db
+from . import database
 from flask import abort, request
+from werkzeug import secure_filename
+import os
 
 class DocumentResource(restful.Resource):
 
@@ -8,10 +10,12 @@ class DocumentResource(restful.Resource):
 
         documents = [
             {
+                'id': document['id'],
                 'name': document['name'],
                 'size': document['size'],
-                'uploaded': document['uploaded'].strftime('%Y-%m-%d %H:%M:%S')
-            } for document in db.get_all_documents()
+                'path': document['path'],
+                'uploaded': document['upload_time'].strftime('%Y-%m-%d %H:%M:%S')
+            } for document in database.get_all_documents()
         ]
 
         return {'documents': documents}
@@ -34,6 +38,16 @@ class DocumentResource(restful.Resource):
 
         file.save(path)
 
-        db.add_document(path)
+        database.add_document(path)
 
-        return ''
+        documents = [
+            {
+                'id': document['id'],
+                'name': document['name'],
+                'size': document['size'],
+                'path': document['path'],
+                'uploaded': document['upload_time'].strftime('%Y-%m-%d %H:%M:%S')
+            } for document in database.get_all_documents()
+        ]
+
+        return {'documents': documents}
