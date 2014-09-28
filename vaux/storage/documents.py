@@ -89,6 +89,7 @@ class DocEngine():
             'path': final_path})
         self.index.put(index_objects)
         self.pdfindex_queue.put(self.index.get({'path': final_path})['id'])
+        self.replica_queue.put(self.index.get({'path': final_path})['id'])
 
     def get_document_path(self, docid):
         """
