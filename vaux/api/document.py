@@ -38,6 +38,10 @@ class DocumentInstance(restful.Resource):
 
 class DocumentResource(restful.Resource):
 
+    def options(self):
+
+        pass
+
     def get(self):
 
         documents = [
