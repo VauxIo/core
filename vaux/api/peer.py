@@ -88,7 +88,6 @@ class PeerResource(restful.Resource):
             'last_seen': last_seen,
             'location': location
         }
-        print peer
         database.add_peer(peer)
         peers = [
             {

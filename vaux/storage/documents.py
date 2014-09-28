@@ -4,9 +4,9 @@ import gevent.queue
 gevent.monkey.patch_all()
 import os
 import os.path
-from docliber.storage.metadata import MetaEngine
-from docliber.storage.pdfindexer import PDFIndexer
-from docliber.peering import Replicator
+from vaux.storage.metadata import MetaEngine
+from vaux.storage.pdfindexer import PDFIndexer
+from vaux.peering import Replicator
 from hashlib import sha1
 import itertools
 import datetime

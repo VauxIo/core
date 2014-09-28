@@ -1,7 +1,7 @@
 import os
 import os.path
-from docliber.storage import LibreDB
-from docliber.storage.documents import DocumentExistsError
+from vaux.storage import LibreDB
+from vaux.storage.documents import DocumentExistsError
 import sys
 
 

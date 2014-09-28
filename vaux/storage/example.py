@@ -2,7 +2,7 @@ import gevent
 import gevent.monkey
 gevent.monkey.patch_all()
 import requests
-from docliber.storage import LibreDB
+from vaux.storage import LibreDB
 import os.path
 
 

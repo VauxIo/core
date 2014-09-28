@@ -3,11 +3,14 @@ from setuptools import setup, find_packages
 requires = [
     'rethinkdb',
     'flask',
-    'gevent'
+    'flask-restful',
+    'gevent',
+    'requests',
+    'PyPDF2',
 ]
 
 setup(
-    name='docliber',
+    name='vaux',
     version='0.1.0',
     description='Document Liberation',
     packages=find_packages(),
@@ -15,6 +18,6 @@ setup(
     zip_safe=False,
     entry_points="""
     [console_scripts]
-    docliber_ingest = docliber.scripts:load_from_fs
+    vaux_ingest = vaux.scripts:load_from_fs
     """
 )

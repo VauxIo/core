@@ -1,5 +1,5 @@
-from docliber.storage.metadata import MetaEngine
-from docliber.storage.documents import DocEngine
+from vaux.storage.metadata import MetaEngine
+from vaux.storage.documents import DocEngine
 
 
 class LibreDB(object):

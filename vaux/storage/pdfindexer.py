@@ -3,7 +3,7 @@ import gevent.monkey
 gevent.monkey.patch_all()
 from PyPDF2 import PdfFileReader
 import rethinkdb as r
-from docliber.storage.metadata import MetaEngine
+from vaux.storage.metadata import MetaEngine
 
 
 class PDFIndexer(object):

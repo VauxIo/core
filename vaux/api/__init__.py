@@ -1,7 +1,7 @@
 import os
 from flask import Flask, abort, request
 from flask.ext import restful
-from docliber.storage import LibreDB
+from vaux.storage import LibreDB
 from datetime import datetime
 from werkzeug import secure_filename
 from cors import crossdomain
