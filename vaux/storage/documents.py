@@ -38,9 +38,12 @@ class DocEngine():
         self._create_dirs()
         self.index = MetaEngine(hostname, port, db, 'documents')
         self.pdfindex_queue = gevent.queue.Queue()
-        self.pdfindexers = [PDFIndexer(self.pdfindex_queue, hostname, port, db) for x in xrange(0, 4)]
-        self.replicators = [Replicator(self.pdfindex_queue, hostname, port, db) for x in xrange(0, 4)]
-        map(gevent.spawn, map(lambda pi: pi.run, self.pdfindexers + self.replicators))
+        self.replica_queue = gevent.queue.Queue()
+        self.pdfindexers = [PDFIndexer(self.pdfindex_queue, hostname, port, db)
+                            for x in xrange(0, 4)]
+        self.replicators = [Replicator(self.replica_queue, hostname, port, db)
+                            for x in xrange(0, 4)]
+        map(gevent.spawn, map(lambda thread: thread.run, self.pdfindexers + self.replicators))
 
     def _create_dirs(self):
         """
