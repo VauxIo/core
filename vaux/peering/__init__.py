@@ -32,3 +32,4 @@ class Replicator(object):
                     SendDoc(document, peer)
                 except Exception as e:
                     print('Failed to Send {0} to {1}: {2}'.format(document['name'], peer['hostname'], e))
+                    self.in_queue.put(docid)
