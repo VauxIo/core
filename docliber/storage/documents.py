@@ -1,9 +1,11 @@
 import gevent
 import gevent.monkey
+import gevent.queue
 gevent.monkey.patch_all()
 import os
 import os.path
 from docliber.storage.metadata import MetaEngine
+from docliber.storage.pdfindexer import PDFIndexer
 from hashlib import sha1
 import itertools
 import datetime
@@ -34,6 +36,9 @@ class DocEngine():
         self.doc_path = os.path.join(self.root_path, "documents")
         self._create_dirs()
         self.index = MetaEngine(hostname, port, db, 'documents')
+        self.pdfindex_queue = gevent.queue.Queue()
+        self.pdfindexers = [PDFIndexer(self.pdfindex_queue, hostname, port, db) for x in xrange(0, 4)]
+        map(gevent.spawn, self.pdfindexers)
 
     def _create_dirs(self):
         """
@@ -78,6 +83,7 @@ class DocEngine():
             'upload_time': upload_time,
             'path': final_path})
         self.index.put(index_objects)
+        self.pdfindexer_queue.put(self.index.get({'path': final_path})['id'])
 
     def get_document_path(self, docid):
         """
