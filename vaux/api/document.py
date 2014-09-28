@@ -18,7 +18,7 @@ class DocumentInstance(restful.Resource):
             'id': document['id'],
             'name': document['name'],
             'size': document['size'],
-            'path': document['path'],
+            'path': '/'.join(document['path'].split('/')[-2:]),
             'uploaded': document['upload_time'].strftime('%Y-%m-%d %H:%M:%S')
         }
 
@@ -49,7 +49,7 @@ class DocumentResource(restful.Resource):
                 'id': document['id'],
                 'name': document['name'],
                 'size': document['size'],
-                'path': document['path'],
+                'path': '/'.join(document['path'].split('/')[-2:]),
                 'uploaded': document['upload_time'].strftime('%Y-%m-%d %H:%M:%S')
             } for document in database.get_all_documents()
         ]
