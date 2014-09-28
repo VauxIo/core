@@ -5,6 +5,14 @@ from datetime import datetime
 import pytz
 import requests
 
+def GeoIpLookup(ip):
+    loc_resp = requests.get(
+        'https://freegeoip.net/json/{0}'.format(ip))
+    try:
+        location = loc_resp.json()
+        return {'latitude': location['latitude'], 'longitude': location['longitude']}
+    except:
+        return {'latitude': None, 'longitude': None}
 
 class PeerInstance (restful.Resource):
 
@@ -21,7 +29,8 @@ class PeerInstance (restful.Resource):
             'address': peer['address'],
             'port': peer['port'],
             'hostname': peer['hostname'],
-            'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
+            'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S'),
+            'location': peer['location']
         }
 
         return peer
@@ -48,7 +57,8 @@ class PeerResource(restful.Resource):
                 'address': peer['address'],
                 'port': peer['port'],
                 'hostname': peer['hostname'],
-                'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S')
+                'last_seen': peer['last_seen'].strftime('%Y-%m-%d %H:%M:%S'),
+                'location': peer['location']
             } for peer in database.get_peers()
         ]
 
@@ -69,18 +79,10 @@ class PeerResource(restful.Resource):
 
         last_seen = pytz.utc.localize(last_seen)
 
-        if not latitude or not longitude:
-            loc_resp = requests.get(
-                'https://freegeoip.net/json/{0}'.format(address))
-
-            try:
-                location = loc_resp.json()
-                location = {'latitude': location['latitude'], 'longitude': location['longitude']}
-            except:
-                location = {'latitude': 'unknown', 'longitude': 'unknown'}
-        else:
+        if latitude and longitude:
             location = {'latitude': latitude, 'longitude': longitude}
-
+        else:
+            location = GeoIpLookup(address)
         peer = {
             'address': address,
             'port': port,
