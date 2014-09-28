@@ -3,7 +3,28 @@ import rethinkdb as r
 
 class MetaEngine(object):
     def __init__(self, hostname, port, db, table):
+        self.rdb = r.connect(host=hostname, port=port, timeout=20)
+
+        try:
+
+            self.rdb.db_create(db).run()
+
+        except Exception, e:
+
+            pass
+
+        self.rdb.close()
+
         self.rdb = r.connect(host=hostname, port=port, db=db, timeout=20)
+
+        try:
+
+            self.rdb.table_create(table).run()
+
+        except Exception, e:
+
+            pass
+
         self.table = table
 
     def get_all(self):
