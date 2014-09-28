@@ -8,6 +8,7 @@ from hashlib import sha1
 import itertools
 import datetime
 import pytz
+from shutil import move
 
 
 def take(n, i):
@@ -68,9 +69,9 @@ class DocEngine():
             os.mkdir(subdir)
         final_path = os.path.join(subdir, file_hash)
         if self.index.exists({'path': final_path}):
-            original = self.index.load({'path': final_path})[0]
+            original = self.index.get({'path': final_path})
             raise DocumentExistsError("This document already exists", original['id'])
-        os.rename(path, final_path)
+        move(path, final_path)
         index_objects.append({
             'name': name,
             'size': size,
@@ -83,10 +84,7 @@ class DocEngine():
         Return the path to a document if we have it. This function
         expects the full name of a document"
         """
-        results = self.index.load({"id": docid})
-        if len(results) > 0:
-            return results[0]
-        return None
+        return self.index.get({"id": docid})
 
     def search_documents(self, search_str):
         """
